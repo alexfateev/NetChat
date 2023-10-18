@@ -17,8 +17,8 @@ public class Client {
     private Thread threadWriter;
     private Socket clientSocket;
 
-    public Client() throws IOException {
-//        try {
+    public Client() {
+        try {
             loadProperties();
 
             clientSocket = new Socket(host, port);
@@ -27,9 +27,9 @@ public class Client {
 
             threadWriter.start();
             threadListener.start();
-//        } catch (IOException e) {
-//            System.out.println("Ошибка подключения к серверу. " + e.getMessage());
-//        }
+        } catch (IOException e) {
+            System.out.println("Ошибка подключения к серверу. " + e.getMessage());
+        }
 
     }
 
@@ -81,10 +81,6 @@ public class Client {
     }
 
     public static void main(String[] args) {
-        try {
-            new Client();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        new Client();
     }
 }
