@@ -4,6 +4,8 @@ import server.Message;
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.Scanner;
 
@@ -15,8 +17,8 @@ public class Client {
     private Thread threadWriter;
     private Socket clientSocket;
 
-    public Client() {
-        try {
+    public Client() throws IOException {
+//        try {
             loadProperties();
 
             clientSocket = new Socket(host, port);
@@ -25,9 +27,9 @@ public class Client {
 
             threadWriter.start();
             threadListener.start();
-        } catch (IOException e) {
-            System.out.println("Ошибка подключения к серверу. " + e.getMessage());
-        }
+//        } catch (IOException e) {
+//            System.out.println("Ошибка подключения к серверу. " + e.getMessage());
+//        }
 
     }
 
@@ -67,9 +69,11 @@ public class Client {
     public void loadProperties() {
         Properties props = new Properties();
         try {
-            props.load(new FileInputStream(new File("config_client.ini")));
-            host = props.getProperty("HOST", "localhost");
-            port =  Integer.parseInt(props.getProperty("PORT", "4444"));
+            if (Files.exists(Paths.get("config_client.ini"))) {
+                props.load(new FileInputStream(new File("config_client.ini")));
+                host = props.getProperty("HOST", "localhost");
+                port = Integer.parseInt(props.getProperty("PORT", "4444"));
+            }
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -77,6 +81,10 @@ public class Client {
     }
 
     public static void main(String[] args) {
-        new Client();
+        try {
+            new Client();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -19,10 +19,6 @@ public class Message implements Serializable {
         this.userName = userName;
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
     public String getMessage() {
         return message;
     }

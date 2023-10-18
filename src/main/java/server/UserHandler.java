@@ -6,7 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 
-public class UserHandler2 extends Thread {
+public class UserHandler extends Thread {
     private Socket clientSocket;
     private String userName;
     private boolean registered = false;
@@ -24,7 +24,7 @@ public class UserHandler2 extends Thread {
                 sendMessage(new Message("Для регистрации введите имя: "));
                 message = (Message) in.readObject();
                 userName = message.getMessage();
-                Server2.userRegistered(this);
+                Server.userRegistered(this);
             }
 
             while (!Thread.currentThread().isInterrupted()) {
@@ -40,13 +40,13 @@ public class UserHandler2 extends Thread {
                                 sendMessage(new Message("/exit"));
                                 break;
                             case "/ulist":
-                                Server2.showAllClient(this);
+                                Server.showAllClient(this);
                                 break;
                             default:
                                 sendMessage(new Message("Команда не распознана"));
                         }
                     } else {
-                        Server2.sendToAllClient(message, this);
+                        Server.sendToAllClient(message, this);
                     }
                 }
             }
@@ -58,7 +58,7 @@ public class UserHandler2 extends Thread {
             } catch (IOException ex) {
                 e.printStackTrace();
             }
-            if (registered) Server2.userUnregistered(this);
+            if (registered) Server.userUnregistered(this);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -66,7 +66,7 @@ public class UserHandler2 extends Thread {
         }
     }
 
-    public UserHandler2(Socket clientSocket) {
+    public UserHandler(Socket clientSocket) {
         this.clientSocket = clientSocket;
         start();
     }
