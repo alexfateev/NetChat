@@ -11,8 +11,8 @@ import java.util.Scanner;
 
 public class Client {
 
-    private String host = "localhost";
-    private int port = 4444;
+    private String host;
+    private int port;
     private Thread threadListener;
     private Thread threadWriter;
     private Socket clientSocket;
